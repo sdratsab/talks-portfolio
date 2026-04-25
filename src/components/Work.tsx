@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 
-// We still generate the maximum 23 slots, but the site will automatically hide any that don't have a real image file.
+// Generating your exact count with categorical titles and no "medium"
 const projects = [
   ...Array.from({ length: 10 }).map((_, i) => ({
     id: `digital-${i + 1}`,
@@ -33,10 +33,10 @@ export function Work() {
   const [selectedProject, setSelectedProject] = useState<(typeof projects)[0] | null>(null)
   const [activeCategory, setActiveCategory] = useState('All')
   
-  // This new state keeps a list of any images that failed to load
+  // State monitor for failed images
   const [failedImages, setFailedImages] = useState<string[]>([])
 
-  // Filter out any projects that are in the "failed" list, plus handle the category tabs
+  // Filter projects based on the active tab and remove any that failed to load
   const filteredProjects = projects.filter(
     project => 
       (activeCategory === 'All' || project.category === activeCategory) && 
@@ -98,7 +98,6 @@ export function Work() {
                 alt={project.title}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  // If the .jpg fails, try the .png. If the .png fails, tell the app to delete the slot.
                   if (target.src.includes('.jpg')) {
                     target.src = target.src.replace('.jpg', '.png');
                   } else {
@@ -154,13 +153,10 @@ export function Work() {
                   <span className="text-accent">_</span>
                   {selectedProject.title}
                 </h3>
-                <div className="space-y-2 font-sans text-sm text-muted mb-8">
+                <div className="space-y-2 font-sans text-sm text-muted">
                   <p>CATEGORY: {selectedProject.category}</p>
                   <p>YEAR: {selectedProject.year}</p>
                 </div>
-                <p className="font-sans text-foreground/80 leading-relaxed">
-                  A deeper look into this piece, exploring the visual narrative and technical execution required for the final output.
-                </p>
               </div>
             </motion.div>
           </motion.div>
