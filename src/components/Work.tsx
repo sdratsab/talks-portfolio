@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 
-// Generating your exact count with categorical titles and no "medium"
+// Generating your exact count with categorical titles
 const projects = [
   ...Array.from({ length: 10 }).map((_, i) => ({
     id: `digital-${i + 1}`,
@@ -96,10 +96,13 @@ export function Work() {
               <img
                 src={project.image}
                 alt={project.title}
+                loading="lazy" 
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   if (target.src.includes('.jpg')) {
-                    target.src = target.src.replace('.jpg', '.png');
+                    const newSrc = target.src.replace('.jpg', '.png');
+                    target.src = newSrc;
+                    project.image = newSrc; // Update the image path so the popup uses the right one!
                   } else {
                     setFailedImages(prev => [...prev, project.id]);
                   }
